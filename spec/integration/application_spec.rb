@@ -16,19 +16,37 @@ describe Application do
   # class so our tests work.
   let(:app) { Application.new }
 
-  context 'GET /album' do
+  context 'GET /albums' do
     before(:each) do 
       reset_albums_table
     end
 
     it 'should return list of albums' do
-    response = get('/album')
+    response = get('/albums')
 
     expected_response = 'Doolittle, Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring'
 
     expect(response.status).to eq(200)
     expect(response.body).to eq(expected_response)
     
+    end
+  end  
+
+  context 'POST /albums' do
+    it 'should create a new album' do
+    response = post(
+      '/albums', 
+      title: 'Voyage', 
+      release_year: '2022', 
+      artist_id: '2'
+    )
+    
+    expect(response.status).to eq(200)
+    expect(response.body).to eq('')
+
+    response = get('/albums')
+
+    expect(response.body).to include('Voyage')
     end
   end  
 end
