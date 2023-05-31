@@ -16,6 +16,34 @@ describe Application do
   # class so our tests work.
   let(:app) { Application.new }
 
+  context 'GET /' do
+    it 'returns a hello page if password is correct' do
+      response = get('/', password: 'abcd')
+
+      expect(response.body).to include('Hello!')
+    end
+
+    it 'returns a forbidden page if password is incorrect' do
+      response = get('/', password: 'abooo')
+
+      expect(response.body).to include('Access Forbidden')
+    end
+  end 
+
+  context 'GET /albums/:id' do
+    before(:each) do 
+      reset_albums_table
+    end
+    it 'should return info about album2' do
+      response = get('/albums/2')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<h1>Surfer Rosa</h1>')
+      expect(response.body).to include('Release year: 1988')
+      expect(response.body).to include('Artist: Pixies')
+    end
+  end  
+
   context 'GET /albums' do
     before(:each) do 
       reset_albums_table
@@ -49,4 +77,39 @@ describe Application do
     expect(response.body).to include('Voyage')
     end
   end  
+
+  # context 'GET /' do
+  #   it 'returns a list of names' do
+  #     response = get('/')
+
+  #     expect(response.body).to include('<p>Anna</p>')
+  #     expect(response.body).to include('<p>Kim</p>')
+  #     expect(response.body).to include('<p>James</p>')
+  #     expect(response.body).to include('<p>David</p>')
+  #   end
+  # end  
+
+
+  # context 'GET /' do
+  #   it 'returns the html index' do
+  #     response = get('/')
+
+  #     expect(response.body).to include('h1>Hello!</h1>')
+  #   end
+  # end  
+  # context 'GET /' do
+  #   it 'returns the html message with name' do
+  #     response = get('/', name: "Ozzy")
+
+  #     expect(response.body).to include('h1>Hello Ozzy!</h1>')
+  #   end
+  # end  
+
+  # context 'GET /' do
+  #   it 'returns the html message with name' do
+  #     response = get('/', name: "Obi")
+
+  #     expect(response.body).to include('h1>Hello Obi!</h1>')
+  #   end
+  # end  
 end

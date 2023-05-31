@@ -15,8 +15,36 @@ class Application < Sinatra::Base
   end
 
   get '/' do
-    return erb(:index)
-  end
+    @password = params[:password]
+   
+   return erb(:index)
+ end
+#   get '/' do
+#     @names = ['Anna', 'Kim', 'James', 'David']
+   
+#    return erb(:index)
+#  end
+
+
+  # get '/' do
+  #    @name = params[:name]
+    
+  #   return erb(:index)
+  # end
+
+  # get '/' do
+  #   return erb(:index)
+  # end
+
+ get '/albums/:id' do
+    repo = AlbumRepository.new
+    artist_repo = ArtistRepository.new
+
+    @album = repo.find(params[:id])
+    @artist = artist_repo.find(@album.artist_id)
+
+    return erb(:album)
+ end
 
 
 
