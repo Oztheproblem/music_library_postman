@@ -19,24 +19,9 @@ class Application < Sinatra::Base
    
    return erb(:index)
  end
-#   get '/' do
-#     @names = ['Anna', 'Kim', 'James', 'David']
-   
-#    return erb(:index)
-#  end
 
 
-  # get '/' do
-  #    @name = params[:name]
-    
-  #   return erb(:index)
-  # end
-
-  # get '/' do
-  #   return erb(:index)
-  # end
-
- get '/albums/:id' do
+  get '/albums/:id' do
     repo = AlbumRepository.new
     artist_repo = ArtistRepository.new
 
@@ -44,21 +29,27 @@ class Application < Sinatra::Base
     @artist = artist_repo.find(@album.artist_id)
 
     return erb(:album)
- end
+  end
 
+ get '/artists/:id' do
+  repo = ArtistRepository.new
+  @artist = repo.find(params[:id])
+  return erb(:artist)
+end
 
+ get '/albums' do
+  repo = AlbumRepository.new
+  @albums = repo.all
+  return erb(:albums_list)
 
+end
 
-  get '/albums' do
-    repo = AlbumRepository.new
-    albums = repo.all
+get '/artists' do
+  repo = ArtistRepository.new
+  @artists = repo.all
+  return erb(:artist_list)
 
-    response = albums.map do |album|
-      album.title
-    end.join(', ')
-
-  return response
-  end 
+end
 
   post '/albums' do
     repo = AlbumRepository.new
@@ -71,6 +62,4 @@ class Application < Sinatra::Base
 
     return ''
   end
-
-
 end
