@@ -18,6 +18,9 @@ class Application < Sinatra::Base
     return erb(:new_album)
   end
 
+  get '/artists/new' do
+    return erb(:new_artists)
+  end
 
   get '/albums/:id' do
     repo = AlbumRepository.new
@@ -47,6 +50,25 @@ get '/artists' do
   @artists = repo.all
   return erb(:artist_list)
 
+end
+
+post '/artists' do
+  def invalid_request_parameters?
+    return true if params[:name].nil? || params[:genre].nil?
+    # Uncomment the following line if you want to check for empty strings
+    # return true if params[:title] == "" || params[:release_year] == "" || params[:artist_id] == ""
+  end
+
+  return status 400 if invalid_request_parameters?
+
+  repo = ArtistRepository.new
+  new_artist = Artist.new
+  # new_artist.id = params[:id]
+  new_artist.name = params[:name]
+  new_artist.genre = params[:genre]
+  repo.create(new_artist)  
+
+  erb(:artist_post_created)
 end
 
 post '/albums' do

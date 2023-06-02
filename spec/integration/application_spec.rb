@@ -65,6 +65,7 @@ describe Application do
       expect(response.body).to include('<a href="/artists/1">Pixies</a>')
     end
   end
+
   context 'GET /albums/new' do
     it 'should return the form to add a new album' do
       response = get('/albums/new')
@@ -84,6 +85,24 @@ describe Application do
     end
   end
   
+  context 'GET /artists/new' do
+    it 'should return the form to add a new artist' do
+      response = get('/artists/new')
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Artist ID</label>')
+      expect(response.body).to include('<input type="text" name="id" />')
+  
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Artist name</label>')
+      expect(response.body).to include('<input type="text" name="name" />')
+  
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Artist genre</label>')
+      expect(response.body).to include('<input type="text" name="genre" />')
+    end
+  end
+
       
   
   context 'POST /albums' do
@@ -103,6 +122,22 @@ describe Application do
     end
   end
   
+  context 'POST /artists' do
+    it "returns an error if the parameters aren't correct" do
+      response = post('/artists', name: 'Digga') # No release_year or artist_id
+      expect(response.status).to eq(400)
+    end
+  
+    it 'should create a new artists' do
+      response = post('/artists', name: 'Digga', genre: 'Drill')
+      
+      expect(response.status).to eq(200)
+      expect(response.body).to include("<p>The artist has been successfully created.</p>")
+  
+      response = get('/artists')
+      expect(response.body).to include('Digga')
+    end
+  end
   
 
   context 'GET /' do
