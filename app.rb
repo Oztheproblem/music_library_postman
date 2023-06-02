@@ -14,11 +14,9 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-  get '/' do
-    @password = params[:password]
-   
-   return erb(:index)
- end
+  get '/albums/new' do
+    return erb(:new_album)
+  end
 
 
   get '/albums/:id' do
@@ -51,15 +49,31 @@ get '/artists' do
 
 end
 
-  post '/albums' do
-    repo = AlbumRepository.new
-    new_album = Album.new
-    new_album.title = params[:title]
-    new_album.release_year = params[:release_year]
-    new_album.artist_id = params[:artist_id]
-  
-    repo.create(new_album)
-
-    return ''
+post '/albums' do
+  def invalid_request_parameters?
+    return true if params[:title].nil? || params[:release_year].nil? || params[:artist_id].nil?
+    # Uncomment the following line if you want to check for empty strings
+    # return true if params[:title] == "" || params[:release_year] == "" || params[:artist_id] == ""
   end
+
+  return status 400 if invalid_request_parameters?
+
+  repo = AlbumRepository.new
+  new_album = Album.new
+  new_album.title = params[:title]
+  new_album.release_year = params[:release_year]
+  new_album.artist_id = params[:artist_id]
+  repo.create(new_album)
+
+  erb :album_post_created
+end
+
+
+
+
+  get '/' do
+    @password = params[:password]
+   
+   return erb(:index)
+ end
 end

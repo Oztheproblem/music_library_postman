@@ -65,24 +65,45 @@ describe Application do
       expect(response.body).to include('<a href="/artists/1">Pixies</a>')
     end
   end
-
-  context 'POST /albums' do
-    it 'should create a new album' do
-    response = post(
-      '/albums', 
-      title: 'Voyage', 
-      release_year: '2022', 
-      artist_id: '2'
-    )
-    
-    expect(response.status).to eq(200)
-    expect(response.body).to eq('')
-
-    response = get('/albums')
-
-    expect(response.body).to include('Voyage')
+  context 'GET /albums/new' do
+    it 'should return the form to add a new album' do
+      response = get('/albums/new')
+  
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Album title</label>')
+      expect(response.body).to include('<input type="text" name="title" />')
+  
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Album release year</label>')
+      expect(response.body).to include('<input type="text" name="release_year" />')
+  
+      expect(response.body).to include('<div>')
+      expect(response.body).to include('<label>Album artist ID</label>')
+      expect(response.body).to include('<input type="text" name="artist_id" />')
     end
-  end  
+  end
+  
+      
+  
+  context 'POST /albums' do
+    it "returns an error if the parameters aren't correct" do
+      response = post('/albums', title: 'Blonde on Blonde') # No release_year or artist_id
+      expect(response.status).to eq(400)
+    end
+  
+    it 'should create a new album' do
+      response = post('/albums', title: 'Voyage', release_year: '2022', artist_id: '2')
+      
+      expect(response.status).to eq(200)
+      expect(response.body).to include("<p>The album has been successfully created.</p>")
+  
+      response = get('/albums')
+      expect(response.body).to include('Voyage')
+    end
+  end
+  
+  
 
   context 'GET /' do
     it 'returns a hello page if password is correct' do
