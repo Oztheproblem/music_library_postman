@@ -1,0 +1,62 @@
+<style>
+    .form-container {
+        width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .form-container input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-container input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .form-container input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="form-container">
+    <form method="POST" action="/albums">
+        <div>
+            <label>Album title</label>
+            <input type="text" name="title" />
+        </div>
+
+        <div>
+            <label>Album release year</label>
+            <input type="text" name="release_year" />
+        </div>
+
+        <div>
+            <label>Album artist ID</label>
+            <input type="text" name="artist_id" />
+        </div>
+
+        <input type="submit" value="Submit" />
+    </form>
+</div>
